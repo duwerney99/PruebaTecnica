@@ -1,5 +1,6 @@
 const { ObtenerConexion } = require('../utilidades/database/postgres');
 const encrypt = require("../utilidades/CifrarContrasena");
+const jwt = require("jsonwebtoken");
 
 
 const RegistrarUsuario = async (usuario) => {
@@ -27,6 +28,31 @@ const RegistrarUsuario = async (usuario) => {
 
 
 
+
+const InicioSesion = async (user) => {
+    const { nombre, contrasena } = user;
+
+        const accessToken = jwt.sign(
+          {
+            nombre: nombre,
+            id: contrasena,
+          },
+          process.env.ACCESS_TOKEN_SECRET,
+          { expiresIn: "60m" }
+        );
+   
+        const refreshToken = jwt.sign(
+          {
+            nombre: nombre,
+            id: contrasena,
+          },
+          process.env.REFRESH_TOKEN_SECRET
+        );
+        return { accessToken, refreshToken };
+  };
+
+
 module.exports = {
-    RegistrarUsuario
+    RegistrarUsuario,
+    InicioSesion
 };

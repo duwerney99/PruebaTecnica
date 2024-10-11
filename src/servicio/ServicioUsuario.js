@@ -11,7 +11,17 @@ const RegistrarUsuario = async (usuario) => {
 };
 
 
+const InicioSesion = async (req,res) => {
+    try{
+        return await UsuarioRepositorio.InicioSesion(req);
+    }catch(e) {
+        console.log("Inicio de sesion sin servicio: ", e)
+    }
+}
+
+
 
 module.exports = {
     RegistrarUsuario,
+    InicioSesion
 };
