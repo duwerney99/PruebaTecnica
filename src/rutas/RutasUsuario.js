@@ -11,7 +11,7 @@ const {
 
 /**
  * @swagger
- * /api:
+ * /api/registrar-usuario:
  *   post:
  *     summary: Registrar un nuevo usuario
  *     tags: [Usuarios]
@@ -25,7 +25,7 @@ const {
  *               email:
  *                 type: string
  *                 description: El correo electrónico del usuario
- *                 example: holamundo@midominio.com
+ *                 example: santiago@gmail.com
  *               name:
  *                 type: string
  *                 description: El nombre del usuario
@@ -51,7 +51,7 @@ const {
  *                     email:
  *                       type: string
  *                       description: Correo electrónico del usuario registrado
- *                       example: holamundo@midominio.com
+ *                       example: santiago@gmail.com
  *                     password:
  *                       type: string
  *                       description: Contraseña cifrada del usuario
@@ -192,7 +192,7 @@ rutas.post("/inicio-sesion", validarInicioSesion, usuarioController.inicioSesion
 
 /**
  * @swagger
- * /api:
+ * /api/consultar-usuarios:
  *   get:
  *     summary: Obtener todos los usuarios
  *     tags: [Usuarios]
