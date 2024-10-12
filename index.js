@@ -1,26 +1,17 @@
 require('dotenv').config();
 const express = require("express");
-const { ObtenerConexion } = require('./src/utilidades/database/postgres');
 const { swaggerDocs } = require('./swagger');
 
 const rutasUsuario = require('./src/rutas/RutasUsuario');
-
-
-
 const app = express();
-
 const PORT = process.env.PORT || 8083;
 
 app.use(express.json());
-
-app.use('/api/usuarios', rutasUsuario);
-
-
+app.use('/api', rutasUsuario);
 
 
 const IniciarServidor = async () => {
     try {
-        await ObtenerConexion();  
         app.listen(PORT, () => {
             console.log(`Servidor en ejecución en el puerto ${PORT}`);
             swaggerDocs(app, PORT);

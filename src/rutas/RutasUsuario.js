@@ -1,8 +1,7 @@
 const express = require("express");
 const rutas = express.Router();
 const usuarioController = require('../controladores/ControladorUsuario')
-
-
+const autenticacion = require('../autenticacion/Autenticacion')
 
 /**
  * @swagger
@@ -99,10 +98,7 @@ const usuarioController = require('../controladores/ControladorUsuario')
  *       500:
  *         description: Error interno del servidor
  */
-
-rutas.post('/', usuarioController.RegistrarUsuario);
-
-
+rutas.post('/registrar-usuario', usuarioController.registrarUsuario);
 
 /**
  * @swagger
@@ -186,11 +182,173 @@ rutas.post('/', usuarioController.RegistrarUsuario);
  *       500:
  *         description: Error interno del servidor
  */
+rutas.post("/inicio-sesion", usuarioController.inicioSesion);
 
+/**
+ * @swagger
+ * /api/usuarios:
+ *   get:
+ *     summary: Obtener todos los usuarios
+ *     tags: [Usuarios]
+ *     security:
+ *       - Bearer: []
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXV..."
+ *         description: Token JWT para la autenticación
+ *     responses:
+ *       200:
+ *         description: Lista de usuarios obtenida exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   user_id:
+ *                     type: integer
+ *                     description: ID del usuario
+ *                     example: 2
+ *                   email:
+ *                     type: string
+ *                     description: Correo electrónico del usuario
+ *                     example: santiago@gmail.com
+ *                   name:
+ *                     type: string
+ *                     description: Nombre del usuario
+ *                     example: santiagoo actualizado
+ *                   password:
+ *                     type: string
+ *                     description: Contraseña cifrada del usuario
+ *                     example: $2a$10$SAYVMm9.03pkWEgQR.m4vecBWdrEf.pN8KiwLTUGK2qqQZ7amIlyK
+ *                   registration_date:
+ *                     type: string
+ *                     format: date-time
+ *                     description: Fecha y hora de registro del usuario
+ *                     example: 2024-10-11T012:40:50.000Z
+ *       401:
+ *         description: No autorizado. El token es inválido o no fue proporcionado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Descripción del error
+ *                   example: "Token no proporcionado o inválido"
+ *       500:
+ *         description: Error interno del servidor
+ */
+rutas.get("/consultar-usuarios", autenticacion, usuarioController.obtenerUsuarios);
 
-rutas.post("/inicio-sesion", usuarioController.InicioSesion);
-
-
+/**
+ * @swagger
+ * /api/usuarios/{usuarioId}:
+ *   get:
+ *     summary: Obtener un usuario por ID
+ *     tags: [Usuarios]
+ *     security:
+ *       - Bearer: []
+ *     parameters:
+ *       - in: path
+ *         name: usuarioId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del usuario a obtener
+ *         example: 12
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXV..."
+ *         description: Token JWT para la autenticación
+ *     responses:
+ *       200:
+ *         description: Usuario obtenido exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user_id:
+ *                   type: integer
+ *                   description: ID del usuario
+ *                   example: 1
+ *                 email:
+ *                   type: string
+ *                   description: Correo electrónico del usuario
+ *                   example: santiago@gmail.com
+ *                 name:
+ *                   type: string
+ *                   description: Nombre del usuario
+ *                   example: user
+ *                 password:
+ *                   type: string
+ *                   description: Contraseña cifrada del usuario
+ *                   example: $2a$10$HjhtXTJWUIEpZOktghLy1OYUSfal5JCIMnCqWva25jWTZsmCgfHgG
+ *                 registration_date:
+ *                   type: string
+ *                   format: date-time
+ *                   description: Fecha y hora de registro del usuario
+ *                   example: 2024-10-11T12:45:00.000Z
+ *       400:
+ *         description: Error en el parámetro de ID. El ID debe ser un número entero.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 errors:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       msg:
+ *                         type: string
+ *                         description: Mensaje de error correspondiente a la validación fallida
+ *                         example: El ID debe ser un número entero
+ *                       param:
+ *                         type: string
+ *                         description: El parámetro que falló la validación
+ *                         example: usuarioId
+ *                       location:
+ *                         type: string
+ *                         description: Donde se encontró el error (por ejemplo, en la ruta)
+ *                         example: path
+ *       401:
+ *         description: No autorizado. El token es inválido o no fue proporcionado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Descripción del error
+ *                   example: "Token no proporcionado o inválido"
+ *       404:
+ *         description: Usuario no encontrado. El ID proporcionado no corresponde a ningún usuario.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Descripción del error
+ *                   example: "Usuario no encontrado"
+ *       500:
+ *         description: Error interno del servidor
+ */
+rutas.get("/consultar-usuario-por-id/:usuarioId", autenticacion, usuarioController.obtenerUsuario);
 
 
 module.exports = rutas

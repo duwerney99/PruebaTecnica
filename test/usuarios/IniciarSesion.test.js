@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { InicioSesion } = require('../../src/repositorios/UsuarioRepositorio');
+const { inicioSesion } = require('../../src/repositorios/UsuarioRepositorio');
 
 jest.mock('jsonwebtoken');
 
@@ -13,7 +13,7 @@ describe('InicioSesion', () => {
     
     const user = { nombre: 'Santiago', contrasena: '12345' };
 
-    const resultado = await InicioSesion(user);
+    const resultado = await inicioSesion(user);
 
     // Verificar que jwt.sign se haya llamado dos veces para generar los tokens
     expect(jwt.sign).toHaveBeenCalledTimes(2);
