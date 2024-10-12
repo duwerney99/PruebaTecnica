@@ -40,9 +40,36 @@ const obtenerUsuario = async (req, res) => {
     }
 }
 
+const actualizarUsuario = (req, res) => {
+    try{
+        servicio.actualizarUsuario(req.body, req.params.usuarioId);
+        res.send({ status: 'OK', data: req.body });
+    } catch(e) {
+        console.log("Error actualizando usuario ", e);
+    }
+}
+
+const eliminarUsuario = async (req, res) => {
+    try {
+        const resultado = await servicio.eliminarUsuario(req.params.usuarioId);
+        res.status(200).json(resultado);
+ 
+    } catch (e) {
+        if (e.message.includes('No se pudo verificar la existencia del usuario')) {
+            res.status(500).json({ error: 'Error interno del servidor' });
+        } else if (e.message.includes('Usuario con ID')) {
+            res.status(404).json({ error: e.message });
+        } else {
+            res.status(500).json({ error: 'Error interno del servidor' });
+        }
+    }
+};
+
 module.exports = {
     registrarUsuario,
     inicioSesion,
     obtenerUsuarios,
     obtenerUsuario,
+    actualizarUsuario,
+    eliminarUsuario
 }

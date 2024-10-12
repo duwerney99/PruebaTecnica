@@ -5,7 +5,7 @@ const autenticacion = require('../autenticacion/Autenticacion')
 
 /**
  * @swagger
- * /api/usuarios:
+ * /api:
  *   post:
  *     summary: Registrar un nuevo usuario
  *     tags: [Usuarios]
@@ -102,7 +102,7 @@ rutas.post('/registrar-usuario', usuarioController.registrarUsuario);
 
 /**
  * @swagger
- * /api/usuarios/inicio-sesion:
+ * /api/inicio-sesion:
  *   post:
  *     summary: Iniciar sesión de usuario
  *     tags: [Usuarios]
@@ -186,7 +186,7 @@ rutas.post("/inicio-sesion", usuarioController.inicioSesion);
 
 /**
  * @swagger
- * /api/usuarios:
+ * /api:
  *   get:
  *     summary: Obtener todos los usuarios
  *     tags: [Usuarios]
@@ -249,7 +249,7 @@ rutas.get("/consultar-usuarios", autenticacion, usuarioController.obtenerUsuario
 
 /**
  * @swagger
- * /api/usuarios/{usuarioId}:
+ * /api/{usuarioId}:
  *   get:
  *     summary: Obtener un usuario por ID
  *     tags: [Usuarios]
@@ -349,6 +349,232 @@ rutas.get("/consultar-usuarios", autenticacion, usuarioController.obtenerUsuario
  *         description: Error interno del servidor
  */
 rutas.get("/consultar-usuario-por-id/:usuarioId", autenticacion, usuarioController.obtenerUsuario);
+
+/**
+ * @swagger
+ * /api/{usuarioId}:
+ *   put:
+ *     summary: Actualizar los detalles de un usuario por ID
+ *     tags: [Usuarios]
+ *     security:
+ *       - Bearer: []
+ *     parameters:
+ *       - in: path
+ *         name: usuarioId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del usuario a actualizar
+ *         example: 12
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXV..."
+ *         description: Token JWT para la autenticación
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 description: Nuevo correo electrónico del usuario
+ *                 example: nuevo-email@dominio.com
+ *               name:
+ *                 type: string
+ *                 description: Nuevo nombre del usuario
+ *                 example: NuevoNombre
+ *               password:
+ *                 type: string
+ *                 description: Nueva contraseña del usuario
+ *                 example: nuevaContraseña123
+ *     responses:
+ *       200:
+ *         description: Usuario actualizado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     user_id:
+ *                       type: integer
+ *                       description: ID del usuario actualizado
+ *                       example: 1
+ *                     email:
+ *                       type: string
+ *                       description: Nuevo correo electrónico del usuario
+ *                       example: nuevo-email@dominio.com
+ *                     name:
+ *                       type: string
+ *                       description: Nuevo nombre del usuario
+ *                       example: NuevoNombre
+ *                     password:
+ *                       type: string
+ *                       description: Contraseña cifrada del usuario
+ *                       example: $2a$10$xxxxxxxxxxxxxxxxxxxxxxxxxx
+ *                     updated_at:
+ *                       type: string
+ *                       format: date-time
+ *                       description: Fecha y hora de la última actualización
+ *                       example: 2024-10-11T9:26:00.000Z
+ *       400:
+ *         description: Error en la validación de los datos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 errors:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       msg:
+ *                         type: string
+ *                         description: Descripción del error
+ *                         example: "El correo debe ser válido"
+ *                       param:
+ *                         type: string
+ *                         description: El parámetro que falló la validación
+ *                         example: email
+ *                       location:
+ *                         type: string
+ *                         description: Lugar donde se encontró el error (por ejemplo, body)
+ *                         example: body
+ *       401:
+ *         description: No autorizado. El token es inválido o no fue proporcionado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Descripción del error
+ *                   example: "Token no proporcionado o inválido"
+ *       404:
+ *         description: Usuario no encontrado. El ID proporcionado no corresponde a ningún usuario.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Descripción del error
+ *                   example: "Usuario no encontrado"
+ *       500:
+ *         description: Error interno del servidor
+ */
+rutas.put("/actualizar-usuario/:usuarioId", autenticacion, usuarioController.actualizarUsuario);
+
+/**
+ * @swagger
+ * /api/{usuarioId}:
+ *   delete:
+ *     summary: Eliminar un usuario por ID
+ *     tags: [Usuarios]
+ *     security:
+ *       - Bearer: []
+ *     parameters:
+ *       - in: path
+ *         name: usuarioId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del usuario a eliminar
+ *         example: 12
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *         description: Token JWT para la autenticación
+ *     responses:
+ *       200:
+ *         description: Usuario eliminado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 data:
+ *                   type: string
+ *                   description: Mensaje de confirmación de eliminación
+ *                   example: Usuario eliminado exitosamente
+ *       400:
+ *         description: Error en los datos de entrada. Por ejemplo, el ID no es un número entero o hay datos inválidos.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 errors:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       msg:
+ *                         type: string
+ *                         description: Mensaje de error correspondiente a la validación fallida
+ *                         example: El ID debe ser un número entero
+ *                       param:
+ *                         type: string
+ *                         description: El parámetro que falló la validación
+ *                         example: usuarioId
+ *                       location:
+ *                         type: string
+ *                         description: Donde se encontró el error (por ejemplo, en la ruta)
+ *                         example: path
+ *       401:
+ *         description: No autorizado. El token es inválido o no fue proporcionado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Descripción del error
+ *                   example: "Token no proporcionado o inválido"
+ *       404:
+ *         description: Usuario no encontrado. El ID proporcionado no corresponde a ningún usuario.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Descripción del error
+ *                   example: "Usuario con ID 12 no encontrado"
+ *       500:
+ *         description: Error interno del servidor, como fallos al verificar la existencia del usuario o al realizar la eliminación.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Descripción del error
+ *                   example: "Error al eliminar el usuario: No se pudo verificar la existencia del usuario con ID 200"
+ */
+rutas.delete("/eliminar-usuario/:usuarioId",autenticacion, usuarioController.eliminarUsuario);
 
 
 module.exports = rutas

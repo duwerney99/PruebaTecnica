@@ -13,6 +13,7 @@ const registrarUsuario = async (usuario) => {
         return await usuarioRepositorio.registrarUsuario(fechaHora, constrasenaEncriptada, usuario);
     } catch (e) {
         console.log("No se pudo registrar el usuario ", e);
+        throw error;
     }
 };
 
@@ -21,6 +22,7 @@ const inicioSesion = async (req, _) => {
         return await usuarioRepositorio.inicioSesion(req);
     } catch (e) {
         console.log("Inicio de sesion sin servicio: ", e);
+        throw error;
     }
 }
 
@@ -29,6 +31,7 @@ const obtenerUsuarios = async () => {
         return await usuarioRepositorio.obtenerUsuarios();
     } catch (e) {
         console.log("Error obteniendo usuarios ", e);
+        throw error;
     }
 };
 
@@ -37,12 +40,34 @@ const obtenerUsuarioPorId = async (usuarioId) => {
         return await usuarioRepositorio.obtenerUsuarioPorId(usuarioId);
     } catch (e) {
         console.log("Error obteniendo usuarios ", e);
+        throw error;
     }
 };
+
+const actualizarUsuario = async (usuario, usuarioId) => {
+    try {
+        return await usuarioRepositorio.actualizarUsuario(usuario, usuarioId);
+      } catch (error) {
+        console.error("Error actualizando usuario:", error.message);
+        throw error;
+      }
+}
+
+const eliminarUsuario = async (usuarioId) => { 
+    try {
+        return await usuarioRepositorio.eliminarUsuario(usuarioId);
+    } catch (error) {
+      console.error("Error eliminado usuario:", error.message);
+      throw error;
+    }
+  };
+
 
 module.exports = {
     registrarUsuario,
     inicioSesion,
     obtenerUsuarios,
     obtenerUsuarioPorId,
+    actualizarUsuario,
+    eliminarUsuario
 };
