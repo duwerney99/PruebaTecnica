@@ -1,7 +1,13 @@
 const express = require("express");
 const rutas = express.Router();
-const usuarioController = require('../controladores/ControladorUsuario')
-const autenticacion = require('../autenticacion/Autenticacion')
+const usuarioController = require('../controladores/ControladorUsuario');
+const autenticacion = require('../autenticacion/Autenticacion');
+const {
+    validarRegistroUsuario,
+    validarInicioSesion,
+    validarUsuarioId,
+    validarActualizacionUsuario
+} = require('../utilidades/validaciones/Validaciones');
 
 /**
  * @swagger
@@ -98,7 +104,7 @@ const autenticacion = require('../autenticacion/Autenticacion')
  *       500:
  *         description: Error interno del servidor
  */
-rutas.post('/registrar-usuario', usuarioController.registrarUsuario);
+rutas.post('/registrar-usuario', validarRegistroUsuario, usuarioController.registrarUsuario);
 
 /**
  * @swagger
@@ -182,7 +188,7 @@ rutas.post('/registrar-usuario', usuarioController.registrarUsuario);
  *       500:
  *         description: Error interno del servidor
  */
-rutas.post("/inicio-sesion", usuarioController.inicioSesion);
+rutas.post("/inicio-sesion", validarInicioSesion, usuarioController.inicioSesion);
 
 /**
  * @swagger
@@ -348,7 +354,7 @@ rutas.get("/consultar-usuarios", autenticacion, usuarioController.obtenerUsuario
  *       500:
  *         description: Error interno del servidor
  */
-rutas.get("/consultar-usuario-por-id/:usuarioId", autenticacion, usuarioController.obtenerUsuario);
+rutas.get("/consultar-usuario-por-id/:usuarioId", validarUsuarioId, autenticacion, usuarioController.obtenerUsuario);
 
 /**
  * @swagger
@@ -476,7 +482,7 @@ rutas.get("/consultar-usuario-por-id/:usuarioId", autenticacion, usuarioControll
  *       500:
  *         description: Error interno del servidor
  */
-rutas.put("/actualizar-usuario/:usuarioId", autenticacion, usuarioController.actualizarUsuario);
+rutas.put("/actualizar-usuario/:usuarioId", validarActualizacionUsuario, autenticacion, usuarioController.actualizarUsuario);
 
 /**
  * @swagger
@@ -574,7 +580,7 @@ rutas.put("/actualizar-usuario/:usuarioId", autenticacion, usuarioController.act
  *                   description: Descripción del error
  *                   example: "Error al eliminar el usuario: No se pudo verificar la existencia del usuario con ID 200"
  */
-rutas.delete("/eliminar-usuario/:usuarioId",autenticacion, usuarioController.eliminarUsuario);
+rutas.delete("/eliminar-usuario/:usuarioId",validarUsuarioId, autenticacion, usuarioController.eliminarUsuario);
 
 
 module.exports = rutas

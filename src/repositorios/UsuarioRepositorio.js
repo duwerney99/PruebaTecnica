@@ -25,7 +25,7 @@ const consultarUsuarioPorCorreo = async (correo) => {
     const sql = `SELECT * FROM pruebaTecnica.usuarios WHERE correo = $1`;
     const conexion = await ObtenerConexion();
     const resultadoado = await conexion.query(sql, [correo]);
-    return resultadoado.rows.length > 0;
+    return resultadoado.rows;
   } catch (e) {
     console.error(`No se pudo consultar el usuario con correo: ${correo}. Error:`, e.message);
     throw new Error('Error al consultar el usuario: ' + e.message);

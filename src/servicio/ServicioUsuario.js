@@ -6,7 +6,9 @@ const encrypt = require("../utilidades/CifrarContrasena");
 const registrarUsuario = async (usuario) => {
     try {
         const existeUsuario = await usuarioRepositorio.consultarUsuarioPorCorreo(usuario.correo);
-        if (existeUsuario) return "El usuario se encuentra registrado";
+        if (existeUsuario.length > 0 && existeUsuario[0].correo === usuario.correo) {
+            return "El usuario se encuentra registrado";
+        }
         const { contrasena } = usuario;
         const fechaHora = new Date();
         const constrasenaEncriptada = await encrypt.encrypt(contrasena);
