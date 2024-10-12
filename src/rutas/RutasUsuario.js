@@ -1,6 +1,7 @@
 const express = require("express");
 const rutas = express.Router();
 const usuarioController = require('../controladores/ControladorUsuario');
+const controladorInicioSesion = require('../controladores/ControladorIncioSesion');
 const autenticacion = require('../autenticacion/Autenticacion');
 const {
     validarRegistroUsuario,
@@ -188,7 +189,7 @@ rutas.post('/registrar-usuario', validarRegistroUsuario, usuarioController.regis
  *       500:
  *         description: Error interno del servidor
  */
-rutas.post("/inicio-sesion", validarInicioSesion, usuarioController.inicioSesion);
+rutas.post("/inicio-sesion", validarInicioSesion, controladorInicioSesion.ejecutar);
 
 /**
  * @swagger
@@ -482,7 +483,7 @@ rutas.get("/consultar-usuario-por-id/:usuarioId", validarUsuarioId, autenticacio
  *       500:
  *         description: Error interno del servidor
  */
-rutas.put("/actualizar-usuario/:usuarioId", validarActualizacionUsuario, autenticacion, usuarioController.actualizarUsuario);
+rutas.put("/actualizar-usuario", validarActualizacionUsuario, autenticacion, usuarioController.actualizarUsuario);
 
 /**
  * @swagger

@@ -24,9 +24,9 @@ const validarUsuarioId = [
 ];
 
 const validarActualizacionUsuario = [
-    param('usuarioId').isInt().withMessage('El ID debe ser un número entero'),
     body('correo').optional().isEmail().withMessage('Debe ser un correo válido'),
-    body('nombre').optional().notEmpty().withMessage('El nombre no puede estar vacío'),validador
+    body('nombre').optional().notEmpty().withMessage('El nombre no puede estar vacío'),
+    body('id').notEmpty().withMessage('El id no puede estar vacío'),validador
 ];
 
 module.exports = {

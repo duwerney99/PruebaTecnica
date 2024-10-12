@@ -77,7 +77,7 @@ class UsuarioRepositorio {
   };
 
 
-  static async actualizarUsuario(usuario, usuarioId) {
+  static async actualizarUsuario(usuario) {
     try {
       const conexion = await ObtenerConexion();
 
@@ -91,11 +91,11 @@ class UsuarioRepositorio {
         usuarioActualizar.contrasena,
         usuarioActualizar.nombre,
         usuarioActualizar.fecha_registro,
-        usuarioId
+        usuario.id
       ]);
-      console.log(`Usuario con ID: ${usuarioId} actualizado correctamente.`);
+      console.log(`Usuario con ID: ${usuario.id} actualizado correctamente.`);
     } catch (e) {
-      console.error(`No se pudo actualizar el usuario con ID: ${usuarioId}. Error:`, e.message);
+      console.error(`No se pudo actualizar el usuario con ID: ${usuario.id}. Error:`, e.message);
       throw new Error('Error al actualizar el usuario: ' + e.message);
     }
   }
@@ -103,15 +103,8 @@ class UsuarioRepositorio {
   static async eliminarUsuario(usuarioId) {
     try {
       const conexion = await ObtenerConexion();
-      const verificarUsuarioSql = `SELECT COUNT(*) AS count FROM pruebaTecnica.usuarios WHERE usuario_id = $1`;
-      const resultadoadoVerificacion = await conexion.query(verificarUsuarioSql, [usuarioId]);
-      const contador = parseInt(resultadoadoVerificacion.rows[0].count, 10);
-      if (contador === 0) {
-        return { error: `Usuario con ID ${usuarioId} no encontrado` };
-      }
       const eliminarUsuarioSql = `DELETE FROM pruebaTecnica.usuarios WHERE usuario_id = $1`;
       await conexion.query(eliminarUsuarioSql, [usuarioId]);
-      return { status: "OK", message: "Usuario eliminado correctamente" };
     } catch (e) {
       console.error(`No se pudo eliminar el usuario con ID: ${usuarioId}. Error:`, e.message);
       throw new Error('Error al eliminar el usuario: ' + e.message);

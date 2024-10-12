@@ -1,18 +1,22 @@
-const servicio = require('../servicio/ServicioUsuario');
+const actualizarUsuario = require('../servicio/usuarios/ActualizarUsuarioServicio');
+const registrarUsuario = require('../servicio/usuarios/RegistrarUsuarioServicio');
+const obtenerUsuario = require('../servicio/usuarios/ObtenerUsuarioServicio');
+const eliminarUsuario = require('../servicio/usuarios/EliminarUsuarioServicio');
+const inicioSesionServicio = require('../servicio/inicio-sesion/InicioSesionServicio');
 
 class ControladorUsuario {
     static async registrarUsuario(req, res) {
         try {
-            const usuario = await servicio.registrarUsuario(req.body);
+            const usuario = await registrarUsuario.ejecutar(req.body);
             res.send({ status: 'OK', data: usuario });
-        } catch (error) {
+        } catch (e) {
             console.log("Error registrando el usuario ", e);
         }
     }
 
     static async inicioSesion (req, res) {
         try {
-            const token = await servicio.inicioSesion(req.body)
+            const token = await inicioSesionServicio.generarToken(req.body)
             res.send({ status: 'OK', data: token });
         } catch (e) {
             console.log(e);
@@ -22,7 +26,7 @@ class ControladorUsuario {
 
     static async obtenerUsuarios (req, res) {
         try {
-            const resultado = await servicio.obtenerUsuarios();
+            const resultado = await obtenerUsuario.obtenerUsuarios();
             res.json(resultado);
         } catch (error) {
             res.status(500);
@@ -33,7 +37,7 @@ class ControladorUsuario {
     static async obtenerUsuario (req, res) {
         try {
             const { usuarioId } = req.params;
-            const resultado = await servicio.obtenerUsuarioPorId(usuarioId);
+            const resultado = await obtenerUsuario.obtenerUsuarioPorId(usuarioId);
             res.json(resultado);
         } catch (error) {
             res.status(500);
@@ -43,7 +47,7 @@ class ControladorUsuario {
 
     static async actualizarUsuario (req, res) {
         try {
-            servicio.actualizarUsuario(req.body, req.params.usuarioId);
+            actualizarUsuario.ejecutar(req.body);
             res.send({ status: 'OK', data: req.body });
         } catch (e) {
             console.log("Error actualizando usuario ", e);
@@ -52,9 +56,8 @@ class ControladorUsuario {
 
     static async eliminarUsuario (req, res) {
         try {
-            const resultado = await servicio.eliminarUsuario(req.params.usuarioId);
-            res.status(200).json(resultado);
-
+            const resultado = await eliminarUsuario.ejecutar(req.params.usuarioId);
+            res.send({ status: "OK", data: resultado });
         } catch (e) {
             if (e.message.includes('No se pudo verificar la existencia del usuario')) {
                 res.status(500).json({ error: 'Error interno del servidor' });
