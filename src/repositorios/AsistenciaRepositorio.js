@@ -3,7 +3,7 @@ const obtenerEventoServicio = require('../servicio/eventos/ObtenerEventoServicio
 const actualizarEventoServicio = require('../servicio/eventos/ActualizarEventoServicio');
 const moment = require('moment');
 require('moment/locale/es');
-moment.locale('es');   
+moment.locale('es');
 
 class AsistenciaRepositorio {
     static async registrarAsistencia(asistencia) {
@@ -71,6 +71,51 @@ class AsistenciaRepositorio {
             diasAsistencia[dia] += evento.asistencia || 0;
         });
         return diasAsistencia;
+    }
+
+    static async obtenerAsistencia(asistenciaId) {
+        try {
+            const conexion = await ObtenerConexion();
+            const resultado = await conexion.query("SELECT * FROM pruebaTecnica.asistencia WHERE asistencia_id = $1", [asistenciaId]);
+            return resultado.rows;
+        } catch (e) {
+            console.error(`No se pudo obtener las asistencias. Error:`, e.message);
+            throw new Error('Error al obtener las asistencias' + e.message);
+        }
+    }
+
+    // static async obtenerAsistenciaPorUsuario(usuarioId) {
+    //     try {
+    //         const conexion = await ObtenerConexion();
+    //         const resultado = await conexion.query("SELECT * FROM pruebaTecnica.asistencia WHERE usuario_id = $1", [usuarioId]);
+            
+    //         return resultado.rows;
+    //     } catch (e) {
+    //         console.error(`No se pudo obtener las asistencias. Error:`, e.message);
+    //         throw new Error('Error al obtener las asistencias' + e.message);
+    //     }
+    // }
+    
+    static async obtenerAsistenciaPorEvento(eventoId) {
+        try {
+            const conexion = await ObtenerConexion();
+            const resultado = await conexion.query("SELECT * FROM pruebaTecnica.asistencia WHERE evento_id = $1", [eventoId]);
+            return resultado.rows;
+        } catch (e) {
+            console.error(`No se pudo obtener las asistencias. Error:`, e.message);
+            throw new Error('Error al obtener las asistencias' + e.message);
+        }
+    }
+
+    static async obtenerAsistencia(asistenciaId) {
+        try {
+            const conexion = await ObtenerConexion();
+            const resultado = await conexion.query("SELECT * FROM pruebaTecnica.asistencia WHERE asistencia_id = $1", [asistenciaId]);
+            return resultado.rows;
+        } catch (e) {
+            console.error(`No se pudo obtener las asistencias. Error:`, e.message);
+            throw new Error('Error al obtener las asistencias' + e.message);
+        }
     }
 }
 

@@ -33,26 +33,6 @@ class UsuarioRepositorio {
     }
   }
 
-  static async inicioSesion(usuario) {
-    const { nombre, contrasena } = usuario;
-    const accessToken = jwt.sign(
-      {
-        nombre: nombre,
-        id: contrasena,
-      },
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "60m" }
-    );
-    const refreshToken = jwt.sign(
-      {
-        nombre: nombre,
-        id: contrasena,
-      },
-      process.env.REFRESH_TOKEN_SECRET
-    );
-    return { accessToken, refreshToken };
-  };
-
   static async obtenerUsuarios() {
     try {
       const conexion = await ObtenerConexion();

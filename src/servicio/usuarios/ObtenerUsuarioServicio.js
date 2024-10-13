@@ -13,7 +13,7 @@ class ObtenerUsuarioServicio {
 
   static async obtenerUsuarioPorId(usuarioId) {
     try {
-      return await usuarioRepositorio.obtenerUsuarioPorId(usuarioId);
+      return resultado = await usuarioRepositorio.obtenerUsuarioPorId(usuarioId);
     } catch (e) {
       console.log("Error obteniendo usuarios ", e);
       throw error;
