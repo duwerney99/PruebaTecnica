@@ -73,7 +73,6 @@ class UsuarioRepositorio {
         usuarioActualizar.fecha_registro,
         usuario.id
       ]);
-      console.log(`Usuario con ID: ${usuario.id} actualizado correctamente.`);
     } catch (e) {
       console.error(`No se pudo actualizar el usuario con ID: ${usuario.id}. Error:`, e.message);
       throw new Error('Error al actualizar el usuario: ' + e.message);

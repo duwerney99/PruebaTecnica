@@ -1,24 +1,29 @@
 const jwt = require('jsonwebtoken');
-const { inicioSesion } = require('../../src/repositorios/UsuarioRepositorio');
+const InicioSesionServicio  = require('../../src/servicio/inicio-sesion/InicioSesionServicio');
 
 jest.mock('jsonwebtoken');
 
 describe('InicioSesion', () => {
   it('debería devolver un accessToken y refreshToken', async () => {
-    
-    // Simulamos que los tokens se generan correctamente
     jwt.sign
-      .mockReturnValueOnce('mockAccessToken')  // Primero para el accessToken
-      .mockReturnValueOnce('mockRefreshToken'); // Luego para el refreshToken
+      .mockReturnValueOnce('mockAccessToken')  
+      .mockReturnValueOnce('mockRefreshToken'); 
+    const usuario = { nombre: 'Santiago', contrasena: '12345' };
+    const resultado = await InicioSesionServicio.generarToken(usuario);
     
-    const user = { nombre: 'Santiago', contrasena: '12345' };
-
-    const resultado = await inicioSesion(user);
-
-    // Verificar que jwt.sign se haya llamado dos veces para generar los tokens
     expect(jwt.sign).toHaveBeenCalledTimes(2);
+
+    expect(jwt.sign).toHaveBeenCalledWith(
+      { nombre: 'Santiago', id: '12345' },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: "60m" }
+    );
+
+    expect(jwt.sign).toHaveBeenCalledWith(
+      { nombre: 'Santiago', id: '12345' },
+      process.env.REFRESH_TOKEN_SECRET
+    );
     
-    // Verificar que el resultado devuelto sea el esperado
     expect(resultado).toEqual({
       accessToken: 'mockAccessToken',
       refreshToken: 'mockRefreshToken',
