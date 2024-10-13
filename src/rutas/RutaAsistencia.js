@@ -121,7 +121,6 @@ const autenticacion = require("../autenticacion/Autenticacion")
  *                   description: Mensaje del error
  *                   example: "Error al registrar la asistencia"
  */
-
 rutas.post("/registrar-asistencia", autenticacion, controladorAsistencia.crearAsistencia);
 
 /**
@@ -188,7 +187,6 @@ rutas.post("/registrar-asistencia", autenticacion, controladorAsistencia.crearAs
  *                   description: Mensaje del error
  *                   example: "Error al obtener los asistentes"
  */
-
 rutas.get("/obtener-asistencias", autenticacion, controladorAsistencia.obtenerAsistencias);
 
 /**
@@ -264,7 +262,6 @@ rutas.get("/obtener-asistencias", autenticacion, controladorAsistencia.obtenerAs
  *                   description: Mensaje del error
  *                   example: "Error al obtener la asistencia diaria"
  */
-
 rutas.get("/asistencia-dia-dia", autenticacion, controladorAsistencia.obtenerAsistenciaDias);
 
 /**
@@ -371,7 +368,7 @@ rutas.get("/obtener-asistente-id/:asistenciaId", autenticacion, controladorAsist
 
 /**
  * @swagger
- * /api/asistentes-registrados-usuario:
+ * /api/obtener-asistentes-registrados-usuario:
  *   get:
  *     summary: Obtener los asistentes registrados por usuario
  *     tags: [Asistentes]
@@ -458,9 +455,7 @@ rutas.get("/obtener-asistente-id/:asistenciaId", autenticacion, controladorAsist
  *                   description: Mensaje del error
  *                   example: "Error al obtener los asistentes del usuario"
  */
-
-// rutas.get("/asistentes-registrados-usuario/:usuarioId", autenticacion, controladorAsistencia.obtenerAsistenciasPorUsuario);
-
+rutas.get("/obtener-asistentes-registrados-usuario/:usuarioId", autenticacion, controladorAsistencia.obtenerAsistenciasPorUsuario);
 
 /**
  * @swagger
@@ -561,10 +556,7 @@ rutas.get("/obtener-asistente-id/:asistenciaId", autenticacion, controladorAsist
  *                   description: Mensaje del error
  *                   example: "Error al obtener los asistentes para el evento"
  */
-
-
-// rutas.get("/obtener-asistencia-evento/:eventoId", autenticacion, controladorAsistencia.obtenerAsistenciaPorEvento)
-
+rutas.get("/obtener-asistencia-evento/:eventoId", autenticacion, controladorAsistencia.obtenerAsistenciaPorEvento)
 
 /**
  * @swagger
@@ -674,8 +666,67 @@ rutas.get("/obtener-asistente-id/:asistenciaId", autenticacion, controladorAsist
  *                   description: Descripción del error
  *                   example: Error interno del servidor
  */
-
 rutas.put("/actualizar-asistencia/:asistenciaId", autenticacion, controladorAsistencia.actualizarAsistencia);
+
+
+/**
+ * @swagger
+ * /api/eliminar-asistencia/{asistenciaId}:
+ *   delete:
+ *     summary: Eliminar un asistente
+ *     tags: [Asistentes]
+ *     security:
+ *       - Bearer: []
+ *     parameters:
+ *       - in: path
+ *         name: asistenteId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *           description: ID del asistente que se desea eliminar
+ *           example: 1
+ *     responses:
+ *       200:
+ *         description: Asistente eliminado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: "OK"
+ *                 message:
+ *                   type: string
+ *                   example: "Asistencia eliminada exitosamente"
+ *       404:
+ *         description: El asistente no fue encontrado o no pudo ser eliminado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Mensaje de error
+ *                   example: "Asistente no encontrado"
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Mensaje del error
+ *                   example: "Error interno del servidor"
+ */
+
+rutas.delete("/eliminar-asistencia/:asistenciaId", autenticacion, controladorAsistencia.eliminarAsistencia);
+
+
+
 
 
 module.exports = rutas;

@@ -79,22 +79,21 @@ class AsistenciaRepositorio {
             const resultado = await conexion.query("SELECT * FROM pruebaTecnica.asistencia WHERE asistencia_id = $1", [asistenciaId]);
             return resultado.rows;
         } catch (e) {
-            console.error(`No se pudo obtener las asistencias. Error:`, e.message);
-            throw new Error('Error al obtener las asistencias' + e.message);
+            console.error(`No se pudo obtener la asistencia ${asistenciaId}. Error:`, e.message);
+            throw new Error('Error al obtener la asistencia' + e.message);
         }
     }
 
-    // static async obtenerAsistenciaPorUsuario(usuarioId) {
-    //     try {
-    //         const conexion = await ObtenerConexion();
-    //         const resultado = await conexion.query("SELECT * FROM pruebaTecnica.asistencia WHERE usuario_id = $1", [usuarioId]);
-            
-    //         return resultado.rows;
-    //     } catch (e) {
-    //         console.error(`No se pudo obtener las asistencias. Error:`, e.message);
-    //         throw new Error('Error al obtener las asistencias' + e.message);
-    //     }
-    // }
+    static async obtenerAsistenciaPorUsuario(usuarioId) {
+        try {
+            const conexion = await ObtenerConexion();
+            const resultado = await conexion.query("SELECT * FROM pruebaTecnica.asistencia WHERE usuario_id = $1", [usuarioId]);
+            return resultado.rows;
+        } catch (e) {
+            console.error(`No se pudo obtener las asistencias por usuario. Error:`, e.message);
+            throw new Error('Error al obtener las asistencias por usuario' + e.message);
+        }
+    }
     
     static async obtenerAsistenciaPorEvento(eventoId) {
         try {
@@ -102,8 +101,8 @@ class AsistenciaRepositorio {
             const resultado = await conexion.query("SELECT * FROM pruebaTecnica.asistencia WHERE evento_id = $1", [eventoId]);
             return resultado.rows;
         } catch (e) {
-            console.error(`No se pudo obtener las asistencias. Error:`, e.message);
-            throw new Error('Error al obtener las asistencias' + e.message);
+            console.error(`No se pudo obtener las asistencias por evento. Error:`, e.message);
+            throw new Error('Error al obtener las asistencias por evento' + e.message);
         }
     }
 
@@ -116,6 +115,17 @@ class AsistenciaRepositorio {
             console.error(`No se pudo obtener las asistencias. Error:`, e.message);
             throw new Error('Error al obtener las asistencias' + e.message);
         }
+    }
+
+    static async eliminarAsistencia(asistenciaId) {
+        try {
+            const conexion = await ObtenerConexion();
+            const eliminarUsuarioSql = `DELETE FROM pruebaTecnica.asistencia WHERE asistencia_id = $1`;
+            await conexion.query(eliminarUsuarioSql, [asistenciaId]);
+          } catch (e) {
+            console.error(`No se pudo eliminar la asistencia con ID: ${asistenciaId}. Error:`, e.message);
+            throw new Error('Error al eliminar la asistencia: ' + e.message);
+          }
     }
 }
 
