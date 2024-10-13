@@ -3,9 +3,9 @@ const asistenciaRepositorio = require("../../repositorios/AsistenciaRepositorio"
 
 
 class ActualizarAsistenciaServicio {
-    static async ejecutar(asistenciaId) {
+    static async ejecutar(asistencia) {
         try {
-            const resultado = await asistenciaRepositorio.obtenerAsistencia(asistenciaId);
+            const resultado = await asistenciaRepositorio.actualizarAsistencia(asistencia);
             return resultado;
         } catch (e) {
             console.log("No se pudo obtener la asistencia ", e);

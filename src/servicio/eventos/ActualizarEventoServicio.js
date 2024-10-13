@@ -8,7 +8,7 @@ class ActualizarEventoServicio {
             return { message: "Evento actualizado correctamente" };
         } catch (e) {
             console.error(error);
-            throw new Error('Error al obtener eliminar el evento: ' + e.message);
+            throw new Error('Error al obtener el evento: ' + e.message);
         }
     }
 }

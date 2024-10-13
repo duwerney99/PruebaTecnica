@@ -56,6 +56,18 @@ class UsuarioRepositorio {
 
   };
 
+  static async obtenerUsuarioPorCorreo(correo) {
+    try {
+      const conexion = await ObtenerConexion();
+      const resultado = await conexion.query("SELECT * FROM pruebaTecnica.usuarios WHERE correo = $1", [correo]);
+      return resultado.rows;
+    } catch (e) {
+      console.error(`No se pudo obtener el usuario con correo: ${correo}. Error:`, e.message);
+      throw new Error('Error al obtener el usuario: ' + e.message);
+    }
+
+  };
+
 
   static async actualizarUsuario(usuario) {
     try {

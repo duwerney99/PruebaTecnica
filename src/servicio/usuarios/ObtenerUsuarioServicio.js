@@ -19,6 +19,15 @@ class ObtenerUsuarioServicio {
       throw error;
     }
   };
+
+  static async obtenerUsuarioPorCorreo(correo) {
+    try {
+      return resultado = await usuarioRepositorio.obtenerUsuarioPorCorreo(correo);
+    } catch (e) {
+      console.log("Error obteniendo usuarios ", e);
+      throw error;
+    }
+  };
 }
 
 module.exports = ObtenerUsuarioServicio;

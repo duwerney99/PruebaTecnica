@@ -7,6 +7,16 @@ const multer = require('multer');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
+const {
+    validarCreacionEvento, 
+    validarEventoId, 
+    validarLugaresCercanos, 
+    validarLugaresCercanosAlEvento, 
+    validarCargueMasivo,
+    validarActualizacionEvento
+} = require('../utilidades/validaciones/ValidacionesEventos');
+
+
 
 /**
  * @swagger
@@ -132,7 +142,7 @@ const upload = multer({ storage: storage });
  *                   descripcion: Descripción del error
  *                   example: "Error al crear el evento: Detalle del error interno"
  */
-rutas.post("/crear-evento", autenticacion, eventoController.crearEvento);
+rutas.post("/crear-evento", validarCreacionEvento, autenticacion, eventoController.crearEvento);
 
 /**
  * @swagger
@@ -202,7 +212,7 @@ rutas.post("/crear-evento", autenticacion, eventoController.crearEvento);
  *                   descripcion: Descripción del error
  *                   example: "Error al obtener la lista de eventos: Detalle del error interno"
  */
-rutas.get("/obtener-eventos", autenticacion, eventoController.obtenerEventos);
+rutas.get("/obtener-eventos",  autenticacion, eventoController.obtenerEventos);
 
 /**
  * @swagger
@@ -322,7 +332,7 @@ rutas.get("/obtener-eventos", autenticacion, eventoController.obtenerEventos);
  *                   descripcion: Descripción del error
  *                   example: "Error al obtener el evento: [Descripción del error]"
  */
-rutas.get("/obtener-evento-por-id/:eventoId", autenticacion, eventoController.obtenerEvento)
+rutas.get("/obtener-evento-por-id/:eventoId", validarEventoId, autenticacion, eventoController.obtenerEvento)
 
 /**
  * @swagger
@@ -469,7 +479,7 @@ rutas.get("/obtener-evento-por-id/:eventoId", autenticacion, eventoController.ob
  *                   type: string
  *                   example: "Error al procesar la solicitud."
  */
-rutas.post("/lugares-cercanos", autenticacion, eventoController.ubicacionesCercanas)
+rutas.post("/lugares-cercanos", validarLugaresCercanos, autenticacion, eventoController.ubicacionesCercanas)
 
 /**
  * @swagger
@@ -628,7 +638,7 @@ rutas.post("/lugares-cercanos", autenticacion, eventoController.ubicacionesCerca
  *                   descripcion: Descripción del error
  *                   example: "Error al obtener los lugares cercanos: [Descripción del error]"
  */
-rutas.post("/lugares-cercanos-al-evento", autenticacion, eventoController.obtenerUbicacionesCercanasAlEvento)
+rutas.post("/lugares-cercanos-al-evento", validarLugaresCercanosAlEvento, autenticacion, eventoController.obtenerUbicacionesCercanasAlEvento)
 
 /**
  * @swagger
@@ -756,7 +766,7 @@ rutas.post("/lugares-cercanos-al-evento", autenticacion, eventoController.obtene
  *                   descripcion: Descripción del error
  *                   example: "Error al actualizar el evento: [Descripción del error]"
  */
-rutas.put("/actualizar-evento", autenticacion, eventoController.actualizarEvento)
+rutas.put("/actualizar-evento", validarActualizacionEvento, autenticacion, eventoController.actualizarEvento)
 
 /**
  * @swagger
@@ -839,5 +849,82 @@ rutas.put("/actualizar-evento", autenticacion, eventoController.actualizarEvento
  *                   example: "Error al eliminar el evento: [Descripción del error]"
  */
 rutas.delete("/eliminar-evento/:eventoId", autenticacion, eventoController.eliminar);
+
+/**
+ * @swagger
+ * /api/cargue-masivo:
+ *   post:
+ *     summary: Cargue masivo de eventos desde un archivo Excel
+ *     tags: [Eventos]
+ *     security:
+ *       - Bearer: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               file:
+ *                 type: string
+ *                 format: binary
+ *                 description: Archivo Excel que contiene los eventos para el cargue masivo.
+ *             required:
+ *               - file
+ *     responses:
+ *       200:
+ *         description: Archivo Excel procesado correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 Status:
+ *                   type: string
+ *                   example: OK
+ *                 Message:
+ *                   type: string
+ *                   example: Archivo Excel procesado correctamente
+ *       400:
+ *         description: Error en la validación del archivo. Puede ser que no se proporcione un archivo, el archivo no sea de tipo Excel o la extensión del archivo no sea válida.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 errors:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       msg:
+ *                         type: string
+ *                         description: Descripción del error
+ *                         example: "Se debe proporcionar un archivo Excel"
+ *       401:
+ *         description: No autorizado. El token es inválido o no fue proporcionado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Descripción del error
+ *                   example: "Token no proporcionado o inválido"
+ *       500:
+ *         description: Error interno del servidor. Problemas al procesar el archivo Excel.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Descripción del error
+ *                   example: "Error al procesar el archivo Excel: [Descripción del error]"
+ */
+
+rutas.post("/cargue-masivo", upload.single('file'),validarCargueMasivo, autenticacion,  eventoController.creacionMasivaEventos)
 
 module.exports = rutas;

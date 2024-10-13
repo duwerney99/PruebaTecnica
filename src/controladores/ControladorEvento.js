@@ -3,6 +3,7 @@ const obtenerEventoServicio = require('../servicio/eventos/ObtenerEventoServicio
 const ubicacionCercanaServicio = require('../servicio/eventos/UbicacionCercanaServicio');
 const actualizarEventoServicio = require('../servicio/eventos/ActualizarEventoServicio');
 const eliminarEventoServicio = require('../servicio/eventos/EliminarEventoServicio');
+const cargueMasivoEventos = require('../servicio/eventos/CargueMasivoEventos');
 
 class ControladorEvento {
   static async crearEvento(req, res) {
@@ -75,6 +76,21 @@ class ControladorEvento {
     } catch (error) {
       res.status(500);
       res.send(error.message)
+    }
+  }
+
+  static async creacionMasivaEventos(req, res) {
+    try {
+      if (!req.file) {
+        return res.status(400).send('No se ha enviado ningún archivo');
+      }
+  
+      await cargueMasivoEventos.ejecutar(req.file.buffer)
+      res.status(200).send({Status: 'OK', Message: 'Archivo Excel procesado correctamente'});
+  
+    } catch (e){
+      console.error('Error al procesar el archivo Excel:', error);
+      res.status(500).send('Error al procesar el archivo Excel');
     }
   }
 }

@@ -8,7 +8,7 @@ const {
     validarInicioSesion,
     validarUsuarioId,
     validarActualizacionUsuario
-} = require('../utilidades/validaciones/Validaciones');
+} = require('../utilidades/validaciones/ValidacionesUsuario');
 
 /**
  * @swagger

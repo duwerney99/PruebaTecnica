@@ -36,7 +36,7 @@ class AsistenciaRepositorio {
 
         } catch (e) {
             console.error(`No se pudo registrar la asistencia con ID: ${asistencia}. Error:`, e.message);
-            throw new Error('Error al registrar el evento: ' + e.message);
+            throw new Error('Error al registrar la asistencia: ' + e.message);
         }
     }
 
@@ -94,7 +94,7 @@ class AsistenciaRepositorio {
             throw new Error('Error al obtener las asistencias por usuario' + e.message);
         }
     }
-    
+
     static async obtenerAsistenciaPorEvento(eventoId) {
         try {
             const conexion = await ObtenerConexion();
@@ -122,10 +122,39 @@ class AsistenciaRepositorio {
             const conexion = await ObtenerConexion();
             const eliminarUsuarioSql = `DELETE FROM pruebaTecnica.asistencia WHERE asistencia_id = $1`;
             await conexion.query(eliminarUsuarioSql, [asistenciaId]);
-          } catch (e) {
+        } catch (e) {
             console.error(`No se pudo eliminar la asistencia con ID: ${asistenciaId}. Error:`, e.message);
             throw new Error('Error al eliminar la asistencia: ' + e.message);
-          }
+        }
+    }
+
+    static async actualizarAsistencia(asistencia) {
+        try {
+            const conexion = await ObtenerConexion();
+
+            const eventoResultado = await conexion.query("SELECT * FROM pruebaTecnica.eventos WHERE evento_id = $1", [asistencia.eventoId])
+            if (!eventoResultado || !Array.isArray(eventoResultado) || eventoResultado.rows.length === 0) {
+                return { success: false, message: `evento con ID ${asistencia.eventoId} no encontrado` };
+            }
+
+            const asistenciaAregistrar = {
+                eventoId: asistencia.eventoId,
+                usuarioId: asistencia.usuarioId,
+                fecha: new Date()
+            };
+
+
+            const sql = `UPDATE pruebaTecnica.asistencia SET evento_id = $1, usuario_id = $2, fecha = $3 WHERE asistencia_id = $4`;
+            await conexion.query(sql, [
+                asistenciaAregistrar.eventoId,
+                asistenciaAregistrar.usuarioId,
+                asistenciaAregistrar.fecha,
+                asistencia.asistenciaId]);
+            return { success: true, message: 'Asistencia actualizada exitosamente.' };
+        } catch (e) {
+            console.error(`No se pudo actualizar la asistencia con ID: ${asistencia.asistenciaId}. Error:`, e.message);
+            throw new Error('Error al actualizar la asistencia: ' + e.message);
+        }
     }
 }
 

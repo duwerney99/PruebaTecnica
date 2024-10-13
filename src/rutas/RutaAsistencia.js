@@ -2,7 +2,13 @@ const express = require("express");
 const rutas = express.Router();
 const controladorAsistencia = require('../controladores/ControladorAsistencia')
 const autenticacion = require("../autenticacion/Autenticacion")
-
+const {
+    validarRegistroAsistente,
+    validarAsitenteId,
+    validarObtenerAsistentesPorEvento,
+    validarObtenerAsistentesPorUsuario,
+    validarActualizacionAsistente
+} = require('../utilidades/validaciones/ValidacionesAsistencia')
 
 /**
  * @swagger
@@ -121,7 +127,7 @@ const autenticacion = require("../autenticacion/Autenticacion")
  *                   description: Mensaje del error
  *                   example: "Error al registrar la asistencia"
  */
-rutas.post("/registrar-asistencia", autenticacion, controladorAsistencia.crearAsistencia);
+rutas.post("/registrar-asistencia", validarRegistroAsistente,autenticacion, controladorAsistencia.crearAsistencia);
 
 /**
  * @swagger
@@ -364,7 +370,7 @@ rutas.get("/asistencia-dia-dia", autenticacion, controladorAsistencia.obtenerAsi
  *                   description: Mensaje del error
  *                   example: "Error al obtener el asistente"
  */
-rutas.get("/obtener-asistente-id/:asistenciaId", autenticacion, controladorAsistencia.obtenerAsistencia);
+rutas.get("/obtener-asistente-id/:asistenciaId", validarAsitenteId,  autenticacion, controladorAsistencia.obtenerAsistencia);
 
 /**
  * @swagger
@@ -455,7 +461,7 @@ rutas.get("/obtener-asistente-id/:asistenciaId", autenticacion, controladorAsist
  *                   description: Mensaje del error
  *                   example: "Error al obtener los asistentes del usuario"
  */
-rutas.get("/obtener-asistentes-registrados-usuario/:usuarioId", autenticacion, controladorAsistencia.obtenerAsistenciasPorUsuario);
+rutas.get("/obtener-asistentes-registrados-usuario/:usuarioId", validarObtenerAsistentesPorUsuario,  autenticacion, controladorAsistencia.obtenerAsistenciasPorUsuario);
 
 /**
  * @swagger
@@ -556,7 +562,7 @@ rutas.get("/obtener-asistentes-registrados-usuario/:usuarioId", autenticacion, c
  *                   description: Mensaje del error
  *                   example: "Error al obtener los asistentes para el evento"
  */
-rutas.get("/obtener-asistencia-evento/:eventoId", autenticacion, controladorAsistencia.obtenerAsistenciaPorEvento)
+rutas.get("/obtener-asistencia-evento/:eventoId", validarObtenerAsistentesPorEvento, autenticacion, controladorAsistencia.obtenerAsistenciaPorEvento)
 
 /**
  * @swagger
@@ -666,7 +672,7 @@ rutas.get("/obtener-asistencia-evento/:eventoId", autenticacion, controladorAsis
  *                   description: Descripción del error
  *                   example: Error interno del servidor
  */
-rutas.put("/actualizar-asistencia/:asistenciaId", autenticacion, controladorAsistencia.actualizarAsistencia);
+rutas.put("/actualizar-asistencia/:asistenciaId", validarActualizacionAsistente, autenticacion, controladorAsistencia.actualizarAsistencia);
 
 
 /**
