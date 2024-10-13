@@ -1,34 +1,34 @@
-const servicioEvento = require('../servicio/ServicioEvento');
-
+const crearEventoServicio = require('../servicio/eventos/CrearEventoServicio');
+const obtenerEventoServicio = require('../servicio/eventos/ObtenerEventoServicio');
+const ubicacionCercanaServicio = require('../servicio/eventos/UbicacionCercanaServicio');
+const actualizarEventoServicio = require('../servicio/eventos/ActualizarEventoServicio');
+const eliminarEventoServicio = require('../servicio/eventos/EliminarEventoServicio');
 
 class ControladorEvento {
   static async crearEvento(req, res) {
     try {
-      const evento = req.body
-      servicioEvento.crearEvento(evento)
-      res.send({ status: 'OK', data: evento })
+      const evento = req.body;
+      await crearEventoServicio.ejecutar(evento);
+      res.send({ status: 'OK', data: evento });
     } catch (e) {
-      console.log(e)
+      console.log(e);
       res.status(500).json({ error: 'Error interno del servidor' });
     }
-
   }
 
   static async obtenerEventos(_req, res) {
     try {
-      const resultado = await servicioEvento.obtenerEventos();
-      res.send({ eventos: resultado })
+      const resultado = await obtenerEventoServicio.obtenerEventos();
+      res.send({ eventos: resultado });
     } catch (error) {
       res.status(500);
-      res.send(error.message)
+      res.send(error.message);
     }
   }
 
-
   static async obtenerEvento(req, res) {
     try {
-      const eventoId = parseInt(req.params.eventoId, 10);
-      const evento = await servicioEvento.obtenerEvento(eventoId);
+      const evento = await obtenerEventoServicio.obtenerEventoPorId(req.params.eventoId);
       res.status(200).json({ status: 'OK', data: evento });
     } catch (error) {
       if (error.message.includes('Evento no encontrado')) {
@@ -37,11 +37,11 @@ class ControladorEvento {
         res.status(500).json({ message: `Error interno del servidor` });
       }
     }
-  };
+  }
 
   static async ubicacionesCercanas(req, res) {
     try {
-      const resultado = await servicioEvento.ubicacionesCercanas(req.body);
+      const resultado = await ubicacionCercanaServicio.obtener(req.body);
       res.send({ status: 'OK', data: resultado })
     } catch (error) {
       res.status(500);
@@ -49,6 +49,35 @@ class ControladorEvento {
     }
   }
 
+  static async obtenerUbicacionesCercanasAlEvento(req, res) {
+    try {
+      const resultado = await ubicacionCercanaServicio.obtenerUbicacionCercaEvento(req.body);
+      res.send({ status: resultado.status, data: resultado });
+    } catch (error) {
+      res.status(500);
+      res.send(error.message)
+    }
+  }
+
+  static async actualizarEvento(req,res) {
+    try {   
+        const resultado = await actualizarEventoServicio.ejecutar(req.body);
+        res.send( { status: 'OK', data: resultado });
+      } catch (e) {
+        console.log(e)
+        res.status(500).json({ error: 'Error interno del servidor' });
+      }
+  }
+
+  static async eliminar(req, res) {
+    try {
+      const resultado = await eliminarEventoServicio.ejecutar(req.params.eventoId);
+      res.send({ status: 'OK', data: resultado });
+    } catch (error) {
+      res.status(500);
+      res.send(error.message)
+    }
+  }
 }
 
 

@@ -4,12 +4,14 @@ const { swaggerDocs } = require('./src/swagger/swagger');
 
 const rutasUsuario = require('./src/rutas/RutasUsuario');
 const rutaEventos = require('./src/rutas/RutaEventos');
+const rutaAsistencia = require('./src/rutas/RutaAsistencia');
 const app = express();
 const PORT = process.env.PORT || 8083;
 
 app.use(express.json());
 app.use('/api', rutasUsuario);
 app.use('/api', rutaEventos);
+app.use('/api', rutaAsistencia);
 
 const IniciarServidor = async () => {
     try {

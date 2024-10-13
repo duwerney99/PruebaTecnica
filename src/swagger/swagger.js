@@ -28,7 +28,7 @@ const options = {
       },
     ],
   },
-  apis: ["src/rutas/RutasUsuario.js", "src/rutas/RutaEventos.js"],
+  apis: ["src/rutas/RutasUsuario.js", "src/rutas/RutaEventos.js", "src/rutas/RutaAsistencia.js"],
 };
 
 
