@@ -7,7 +7,7 @@ class EliminarEventoServicio {
             return { message: "Evento eliminado correctamente" };
         } catch (e) {
             console.error(error);
-            throw new Error('Error al obtener eliminar el evento: ' + e.message);
+            throw new Error('Error al eliminar el evento: ' + e.message);
         }
     }
 }

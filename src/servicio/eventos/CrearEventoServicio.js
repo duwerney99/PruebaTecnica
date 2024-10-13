@@ -18,7 +18,7 @@ class CrearEventoServicio {
                 asistencia: 0,
                 fecha_evento: evento.fecha_evento
             };
-            await eventoRepositorio.crearEvento(eventoAregistrar);
+            return await eventoRepositorio.crearEvento(eventoAregistrar);
         } catch (e) {
             console.log("No se pudo crear el evento ", e);
             throw new Error('Error al registrar el evento: ' + e.message);

@@ -7,9 +7,8 @@ const eliminarEventoServicio = require('../servicio/eventos/EliminarEventoServic
 class ControladorEvento {
   static async crearEvento(req, res) {
     try {
-      const evento = req.body;
-      await crearEventoServicio.ejecutar(evento);
-      res.send({ status: 'OK', data: evento });
+      const resultado = await crearEventoServicio.ejecutar(req.body);
+      res.send({ status: 'OK', data: resultado });
     } catch (e) {
       console.log(e);
       res.status(500).json({ error: 'Error interno del servidor' });

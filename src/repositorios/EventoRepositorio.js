@@ -16,9 +16,10 @@ class EventoRepositorio {
                 evento.asistencia,
                 evento.fecha_evento
             ];
-            await conexion.query(sql, valores);
+            const resultado = await conexion.query(sql, valores);
+            return resultado.rows;
         } catch (e) {
-            console.error(`No se pudo registrar el evento con ID: ${evento.evento_id}. Error:`, e.message);
+            console.error(`No se pudo registrar el evento con nombre: ${evento.nombre}. Error:`, e.message);
             throw new Error('Error al registrar el evento: ' + e.message);
         }
     };
@@ -30,7 +31,7 @@ class EventoRepositorio {
             return resultado.rows;
         } catch (e) {
             console.log("No se pudieron obtener los eventos: ", e);
-            throw new Error('Error al registrar el evento: ' + e.message);
+            throw new Error('Error al obtener el evento: ' + e.message);
         }
     }
     
@@ -50,8 +51,8 @@ class EventoRepositorio {
             const conexion = await ObtenerConexion();
             await conexion.query('DELETE FROM pruebaTecnica.eventos WHERE evento_id = $1', [eventoId]);
         } catch (e) {
-            console.log("No se pudo obtener el evento: ", e);
-            throw new Error('Error al obtener el evento: ' + e.message);
+            console.log("No se pudo eliminar el evento: ", e);
+            throw new Error('Error al eliminar el evento: ' + e.message);
         }
     }
 
