@@ -38,7 +38,7 @@ class ControladorUsuario {
         try {
             const { usuarioId } = req.params;
             const resultado = await obtenerUsuario.obtenerUsuarioPorId(usuarioId);
-            res.json(resultado);
+            res.send({ status: 'OK', data: resultado });
         } catch (error) {
             res.status(500);
             res.send(error.message);

@@ -48,7 +48,7 @@ class ControladorAsistencia {
 
   static async actualizarAsistencia(req, res) {
     try {
-      const resultado = await actualizarAsistenciaServicio.ejecutar(req.body);
+      const resultado = await actualizarAsistenciaServicio.ejecutar(req.body, req.params.asistenciaId);
       res.send({ status: 'OK', data: resultado });
     } catch (error) {
       res.status(500);

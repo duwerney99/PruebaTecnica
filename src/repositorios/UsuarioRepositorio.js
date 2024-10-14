@@ -58,14 +58,25 @@ class UsuarioRepositorio {
 
   static async obtenerUsuarioPorCorreo(correo) {
     try {
+      if (!correo) {
+        console.error("El correo está vacío o indefinido:", correo);
+        throw new Error('El correo proporcionado no es válido.');
+      }
       const conexion = await ObtenerConexion();
       const resultado = await conexion.query("SELECT * FROM pruebaTecnica.usuarios WHERE correo = $1", [correo]);
-      return resultado.rows;
+      if (resultado.rows.length === 0) {
+        return { success: false, message: `usuario con correo ${correo} no encontrado` };
+      }
+
+      return {
+        success: true,
+        usuarioId: resultado.rows[0].usuario_id,
+        correo: resultado.rows[0].correo,
+      };
     } catch (e) {
       console.error(`No se pudo obtener el usuario con correo: ${correo}. Error:`, e.message);
       throw new Error('Error al obtener el usuario: ' + e.message);
     }
-
   };
 
 

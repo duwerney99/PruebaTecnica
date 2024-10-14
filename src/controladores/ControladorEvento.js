@@ -89,7 +89,7 @@ class ControladorEvento {
       res.status(200).send({Status: 'OK', Message: 'Archivo Excel procesado correctamente'});
   
     } catch (e){
-      console.error('Error al procesar el archivo Excel:', error);
+      console.error('Error al procesar el archivo Excel:', e);
       res.status(500).send('Error al procesar el archivo Excel');
     }
   }

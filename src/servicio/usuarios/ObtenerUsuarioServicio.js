@@ -13,7 +13,8 @@ class ObtenerUsuarioServicio {
 
   static async obtenerUsuarioPorId(usuarioId) {
     try {
-      return resultado = await usuarioRepositorio.obtenerUsuarioPorId(usuarioId);
+      const resultado = await usuarioRepositorio.obtenerUsuarioPorId(usuarioId);
+      return resultado;
     } catch (e) {
       console.log("Error obteniendo usuarios ", e);
       throw error;
@@ -22,7 +23,8 @@ class ObtenerUsuarioServicio {
 
   static async obtenerUsuarioPorCorreo(correo) {
     try {
-      return resultado = await usuarioRepositorio.obtenerUsuarioPorCorreo(correo);
+      const resultado = await usuarioRepositorio.obtenerUsuarioPorCorreo(correo);
+      return resultado;
     } catch (e) {
       console.log("Error obteniendo usuarios ", e);
       throw error;

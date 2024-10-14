@@ -70,9 +70,8 @@ const validarCargueMasivo = [
 
 
 const validarActualizacionEvento = [
-    param('eventoId')
+    body('eventoId')
         .isInt({ min: 1 }).withMessage('El ID del evento debe ser un número entero positivo'),
-
     body('correo')
         .optional()
         .isEmail().withMessage('Debe ser un correo electrónico válido'),

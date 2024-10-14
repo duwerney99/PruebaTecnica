@@ -86,8 +86,10 @@ class AsistenciaRepositorio {
 
     static async obtenerAsistenciaPorUsuario(usuarioId) {
         try {
+            console.log("usuarioId ", usuarioId)
             const conexion = await ObtenerConexion();
             const resultado = await conexion.query("SELECT * FROM pruebaTecnica.asistencia WHERE usuario_id = $1", [usuarioId]);
+            console.log("Asistente ", resultado)
             return resultado.rows;
         } catch (e) {
             console.error(`No se pudo obtener las asistencias por usuario. Error:`, e.message);
@@ -120,20 +122,19 @@ class AsistenciaRepositorio {
     static async eliminarAsistencia(asistenciaId) {
         try {
             const conexion = await ObtenerConexion();
-            const eliminarUsuarioSql = `DELETE FROM pruebaTecnica.asistencia WHERE asistencia_id = $1`;
-            await conexion.query(eliminarUsuarioSql, [asistenciaId]);
+            await conexion.query('DELETE FROM pruebaTecnica.asistencia WHERE asistencia_id = $1', [asistenciaId]);
         } catch (e) {
             console.error(`No se pudo eliminar la asistencia con ID: ${asistenciaId}. Error:`, e.message);
             throw new Error('Error al eliminar la asistencia: ' + e.message);
         }
     }
 
-    static async actualizarAsistencia(asistencia) {
+    static async actualizarAsistencia(asistencia, asistenciaId) {
         try {
             const conexion = await ObtenerConexion();
 
             const eventoResultado = await conexion.query("SELECT * FROM pruebaTecnica.eventos WHERE evento_id = $1", [asistencia.eventoId])
-            if (!eventoResultado || !Array.isArray(eventoResultado) || eventoResultado.rows.length === 0) {
+            if (eventoResultado.rows.length === 0) {
                 return { success: false, message: `evento con ID ${asistencia.eventoId} no encontrado` };
             }
 
@@ -149,7 +150,7 @@ class AsistenciaRepositorio {
                 asistenciaAregistrar.eventoId,
                 asistenciaAregistrar.usuarioId,
                 asistenciaAregistrar.fecha,
-                asistencia.asistenciaId]);
+                asistenciaId]);
             return { success: true, message: 'Asistencia actualizada exitosamente.' };
         } catch (e) {
             console.error(`No se pudo actualizar la asistencia con ID: ${asistencia.asistenciaId}. Error:`, e.message);

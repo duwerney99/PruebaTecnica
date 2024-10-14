@@ -51,6 +51,7 @@ class ObtenerAsistenciasServicio {
     static async obtenerAsistenciasPorUsuario(usuarioId) {
         try {
             const asistentes = await asistenciaRepositorio.obtenerAsistenciaPorUsuario(usuarioId);
+            console.log("Asistente ", asistentes)
             if (!asistentes || !Array.isArray(asistentes) || asistentes.length === 0) {
                 return { success: false, message: `Asistente con ID ${usuarioId} no encontrado` };
             }

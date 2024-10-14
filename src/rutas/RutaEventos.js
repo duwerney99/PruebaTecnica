@@ -925,6 +925,6 @@ rutas.delete("/eliminar-evento/:eventoId", autenticacion, eventoController.elimi
  *                   example: "Error al procesar el archivo Excel: [Descripción del error]"
  */
 
-rutas.post("/cargue-masivo", upload.single('file'),validarCargueMasivo, autenticacion,  eventoController.creacionMasivaEventos)
+rutas.post("/cargue-masivo", upload.single('file'), autenticacion,  eventoController.creacionMasivaEventos)
 
 module.exports = rutas;

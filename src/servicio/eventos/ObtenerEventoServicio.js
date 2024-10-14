@@ -6,7 +6,7 @@ class ObtenerEventoServicio {
             const resultado = await eventoRepositorio.obtenerEventos();
             return resultado;
         } catch (e) {
-            console.error(error);
+            console.error(e);
             throw new Error('Error al obtener coordenadas: ' + e.message);
         }
     }

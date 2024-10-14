@@ -728,7 +728,6 @@ rutas.put("/actualizar-asistencia/:asistenciaId", validarActualizacionAsistente,
  *                   description: Mensaje del error
  *                   example: "Error interno del servidor"
  */
-
 rutas.delete("/eliminar-asistencia/:asistenciaId", autenticacion, controladorAsistencia.eliminarAsistencia);
 
 
