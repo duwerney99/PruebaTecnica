@@ -5,6 +5,10 @@ Esta aplicación ha sido creada como parte de un reto profesional Mid Backend No
 usuarios registrarse, iniciar sesión, gestionar eventos, usuarios y 
 asistencias, y realizar peticiones a una base de datos.
 
+
+### VIDEO EXPLICANDO EN YOUTUBE
+https://www.youtube.com/watch?v=JKUGlh_vzK0
+
 ## Requisitos Previos
 Asegúrate de tener instalados los siguientes programas en tu máquina:
 
