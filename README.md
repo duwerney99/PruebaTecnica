@@ -1,15 +1,25 @@
 Reto REST Backend Node
+Este proyecto es una aplicación desarrollada en Node.js, que se ejecuta dentro de contenedores Docker y está configurada con Nginx como proxy inverso.
+
 Esta aplicación ha sido creada como parte de un reto profesional Mid Backend Node.js. Proporciona un microservicio RESTful que permite a los 
 usuarios registrarse, iniciar sesión, gestionar eventos, usuarios y 
 asistencias, y realizar peticiones a una base de datos.
 
-Características
+## Requisitos Previos
+Asegúrate de tener instalados los siguientes programas en tu máquina:
+
+- [Docker](https://www.docker.com/get-started) 
+- [Docker Compose](https://docs.docker.com/compose/install/)
+
+## Características
 Usuarios: Registro, inicio de sesión, obtención de token de acceso, actualización, obtención por ID y eliminación.
 Eventos: Creación, actualización, eliminación y obtención de eventos.
 Asistencias: Relación entre usuarios y eventos. Un usuario puede asistir a varios eventos, y un evento puede tener múltiples usuarios.
 Autenticación JWT: Uso de tokens para proteger rutas.
 Cargue masivo de eventos 
-Instalación
+
+
+## Instalación
 Sigue los pasos a continuación para instalar y configurar el proyecto localmente:
 
 Clona el repositorio:

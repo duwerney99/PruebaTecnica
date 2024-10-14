@@ -2,11 +2,12 @@ const { Pool } = require('pg');
 require('dotenv').config();
  
 const conexion = new Pool({
-    host: 'localhost',
-    user: 'postgres',
-    password: '12345',
-    database: 'pruebaTecnica',
-    port: 5432
+    host: process.env.CLOUD_SQL_CONNECTION_NAME ? `/cloudsql/${process.env.CLOUD_SQL_CONNECTION_NAME}` : 'localhost',
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME,
+    port: process.env.CLOUD_SQL_CONNECTION_NAME ? 5432 : 5432, 
+    ssl: process.env.CLOUD_SQL_CONNECTION_NAME ? { rejectUnauthorized: false } : false
 });
  
 const ObtenerConexion = async () => {
@@ -21,3 +22,4 @@ const ObtenerConexion = async () => {
 module.exports = {
     ObtenerConexion
 };
+
